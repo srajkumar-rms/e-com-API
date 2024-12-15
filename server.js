@@ -1,24 +1,22 @@
-import express from "express";
-import productRoutes from "./src/features/product/product.routes.js";
+// 1. Import express
+import express from 'express';
+// import bodyParser from 'body-parser';
+import productRouter from './src/features/product/product.routes.js';
+// 2. Create Server
+const server = express();
 
-const server = express()
+// server.use(bodyParser.json());
+// for all requests related to product, redirect to product routes.
+// localhost:3200/api/products
+server.use("/api/products", productRouter);
 
-//api/users
-//api/products
-//For all request related to product , redirect to product routes
-server.use('/api/products',productRoutes )
+// 3. Default request handler
+server.get('/', (req, res)=>{
+    res.send("Welcome to Ecommerce APIs");
+});
 
-
-
-
-server.get('/',(req,res)=>{
-    res.send('Welcome to Ecomm APIs')
-})
-
-
-
-
+// 4. Specify port.
 server.listen(3000,()=>{
-    console.log('Server listening on port 3000');
-    
-})
+    console.log("Server is running at 3200");
+});
+
