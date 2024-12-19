@@ -1,6 +1,10 @@
-ProductController
-Get all Product
-Add a Product
-Get a Product
+ProductController done
+Get all Product  done
+Add a Product  done
+Get a Product   done
+Filter product  done
+
 Rate Product
-Filter product
+add items to cart
+get items of cart
+remove items from cart

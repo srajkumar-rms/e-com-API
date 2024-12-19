@@ -17,6 +17,6 @@ server.get('/', (req, res)=>{
 
 // 4. Specify port.
 server.listen(3000,()=>{
-    console.log("Server is running at 3200");
+    console.log("Server is running at 3000");
 });
 

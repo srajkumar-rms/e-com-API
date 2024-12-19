@@ -3,7 +3,7 @@ import ProductModel from "./product.model.js";
 export default class ProductController{
 
     getAllProducts(req,res){
-        const products = ProductModel.GetAll();
+        const products = ProductModel.getAll();
         res.status(200).send(products);
     }
 
@@ -18,9 +18,26 @@ export default class ProductController{
         const createdRecord=ProductModel.add(newProduct);
         res.status(201).send(createdRecord);
     }
+    
+    getOneProduct(req,res){
+            const id = req.params.id
+            const product = ProductModel.get(id)
+            if(!product){
+                res.status(404).send('Product not found!')
+            }else{
+            res.status(200).send(product)}
+        }
 
+    filterProducts(req, res){
+        const minPrice = req.query.minPrice;
+        const maxPrice = req.query.maxPrice;
+        const category = req.query.category;
+        console.log(minPrice,maxPrice,category);
+        
+        const result = ProductModel.filter(minPrice,maxPrice,category);
+           
+        res.status(200).send(result)
+        }
     rateProduct(req,res){}
-
-    getOneProduct(req,res){}
 
 }
