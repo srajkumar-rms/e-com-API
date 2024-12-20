@@ -6,6 +6,7 @@ import productRouter from './src/features/product/product.routes.js';
 import userRouter from './src/features/user/user.routes.js';
 import { basicAuthorizer } from './src/middlewares/basicAuth.middleware.js';
 import jwtMiddleware from './src/middlewares/jwt.middleware.js';
+import cartItemRouter from './src/features/cart/cartItems.routes.js';
 
 dotenv.config()
 // 2. Create Server
@@ -16,6 +17,7 @@ server.use(express.json());
 // localhost:3200/api/products
 server.use("/api/products",jwtMiddleware, productRouter);
 server.use("/api/users", userRouter)
+server.use("/api/cart", jwtMiddleware,cartItemRouter)
 
 // 3. Default request handler
 server.get('/', (req, res)=>{

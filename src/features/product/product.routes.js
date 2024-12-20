@@ -17,6 +17,7 @@ productRouter.get('/:id',productController.getOneProduct);
 
 
 productRouter.post('/',upload.single('imageUrl'),productController.addProduct);
+productRouter.post('/rate', productController.rateProduct)
 
 
 export default productRouter;

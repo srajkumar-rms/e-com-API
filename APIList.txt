@@ -10,5 +10,5 @@ remove items from cart
 
 
 UserController 
-signup - email, name, password, typeofuser(customer, seller)
-signin - (email, password)
+signup - email, name, password, typeofuser(customer, seller)  Done
+signin - (email, password)  Done
