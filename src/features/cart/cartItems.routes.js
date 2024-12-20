@@ -7,6 +7,7 @@ const cartItemController = new CartItemsController();
 
 // All the paths to the controller methods.
 // localhost/api/products 
+cartItemRouter.delete('/:id',cartItemController.delete);
 cartItemRouter.post('/',cartItemController.add);
 cartItemRouter.get('/',cartItemController.get);
 
