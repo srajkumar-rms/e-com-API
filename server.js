@@ -1,5 +1,6 @@
 // 1. Import express
 import express from 'express';
+import cors from 'cors'
 // import bodyParser from 'body-parser';
 import dotenv from 'dotenv'
 import productRouter from './src/features/product/product.routes.js';
@@ -13,6 +14,19 @@ import apiDocs from "./swagger.json" with {type: 'json'}
 dotenv.config()
 // 2. Create Server
 const server = express();
+
+
+// CORS policy configuration
+server.use((req,res,next)=>{
+    res.header('Access-Control-Allow-Origin', '*')
+    res.header('Access-Control-Allow-Headers', '*')
+    res.header('Access-Control-Allow-Methods', '*')
+    //return ok for preflight request 
+    if(req.method=="OPTIONS"){
+        return send.sendStatus(200)
+    }
+    next()
+})
 
 server.use(express.json());
 // for all requests related to product, redirect to product routes.
@@ -29,7 +43,11 @@ server.get('/', (req, res)=>{
     res.send("Welcome to Ecommerce APIs");
 });
 
-// 4. Specify port.
+// 4. Middle ware to handle 404 request
+    server.use((req,res)=>{
+        res.status(404).send("API not found")
+    })
+// 5. Specify port.
 server.listen(3000,()=>{
     console.log("Server is running at 3000");
 });
