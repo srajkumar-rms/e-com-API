@@ -3,10 +3,10 @@ Get all Product  done
 Add a Product  done
 Get a Product   done
 Filter product  done
-Rate Product
-add items to cart
-get items of cart
-remove items from cart
+Rate Product done 
+add items to cart done 
+get items of cart done 
+remove items from cart done
 
 
 UserController 

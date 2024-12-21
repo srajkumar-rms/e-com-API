@@ -2,7 +2,6 @@
 
 // 1. Import express.
 import express from 'express';
-import {upload} from '../../middlewares/fileupload.middleware.js';
 import UserController from './user.controller.js';
 
 // 2. Initialize Express router.
