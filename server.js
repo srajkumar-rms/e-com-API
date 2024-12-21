@@ -17,16 +17,22 @@ const server = express();
 
 
 // CORS policy configuration
-server.use((req,res,next)=>{
-    res.header('Access-Control-Allow-Origin', '*')
-    res.header('Access-Control-Allow-Headers', '*')
-    res.header('Access-Control-Allow-Methods', '*')
-    //return ok for preflight request 
-    if(req.method=="OPTIONS"){
-        return send.sendStatus(200)
-    }
-    next()
-})
+// server.use((req,res,next)=>{
+//     res.header('Access-Control-Allow-Origin', '*')
+//     res.header('Access-Control-Allow-Headers', '*')
+//     res.header('Access-Control-Allow-Methods', '*')
+//     //return ok for preflight request 
+//     if(req.method=="OPTIONS"){
+//         return send.sendStatus(200)
+//     }
+//     next()
+// })
+
+var corsOption = {
+    origin: "*"
+}
+
+server.use(cors(corsOption))
 
 server.use(express.json());
 // for all requests related to product, redirect to product routes.
