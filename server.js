@@ -12,10 +12,13 @@ import swagger from 'swagger-ui-express'
 import apiDocs from "./swagger.json" with {type: 'json'}
 import loggerMiddleware from './src/middlewares/logger.middleware.js';
 import { ApplicationError } from './src/error-handler/applicationError.js';
+import {connectToMongoDB} from './src/config/mongodb.js';
 
-dotenv.config()
 // 2. Create Server
 const server = express();
+
+//Load all the env variables in application
+dotenv.config()
 
 
 // CORS policy configuration
@@ -72,5 +75,6 @@ server.use((req, res) => {
 // 5. Specify port.
 server.listen(3000, () => {
     console.log("Server is running at 3000");
+    connectToMongoDB()
 });
 
