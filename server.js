@@ -10,6 +10,7 @@ import jwtMiddleware from './src/middlewares/jwt.middleware.js';
 import cartItemRouter from './src/features/cart/cartItems.routes.js';
 import swagger from 'swagger-ui-express'
 import apiDocs from "./swagger.json" with {type: 'json'}
+import loggerMiddleware from './src/middlewares/logger.middleware.js';
 
 dotenv.config()
 // 2. Create Server
@@ -39,6 +40,7 @@ server.use(express.json());
 // localhost:3200/api/products
 
 server.use("/api-docs", swagger.serve, swagger.setup(apiDocs))
+server.use(loggerMiddleware)
 
 server.use("/api/products",jwtMiddleware, productRouter);
 server.use("/api/users", userRouter)
