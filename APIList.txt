@@ -1,3 +1,19 @@
+Folder Structure
+Route configuration
+Creating APIs
+Different API method
+Middleware
+Route parameter
+query paramenter
+testing api using postman
+securing api using jwt
+documenting using swagger
+cors
+logging 
+error handling
+
+
+
 ProductController done
 Get all Product  done
 Add a Product  done
