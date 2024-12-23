@@ -1,54 +1,86 @@
 import ProductModel from "./product.model.js";
+import ProductRepository from "./product.repository.js";
 
 export default class ProductController {
-
-    getAllProducts(req, res) {
-        const products = ProductModel.getAll();
-        res.status(200).send(products);
+    constructor(){
+        this.productRepository = new ProductRepository()
     }
 
-    addProduct(req, res) {
-        const { name, price, sizes } = req.body;
-        const newProduct = {
-            name,
-            price: parseFloat(price),
-            sizes: sizes.split(','),
-            imageUrl: req.file.filename,
-        };
-        const createdRecord = ProductModel.add(newProduct);
-        res.status(201).send(createdRecord);
-    }
+    async getAllProducts(req, res) {
 
-    getOneProduct(req, res) {
-        const id = req.params.id
-        const product = ProductModel.get(id)
-        if (!product) {
-            res.status(404).send('Product not found!')
-        } else {
-            res.status(200).send(product)
+        try {
+            const products = await this.productRepository.getAll();
+            res.status(200).send(products);
+            
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send("something went wrong ???")
         }
     }
 
-    filterProducts(req, res) {
-        const minPrice = req.query.minPrice;
-        const maxPrice = req.query.maxPrice;
-        const category = req.query.category;
-        console.log(minPrice, maxPrice, category);
+    async addProduct(req, res) {
 
-        const result = ProductModel.filter(minPrice, maxPrice, category);
-
-        res.status(200).send(result)
-    }
-    rateProduct(req, res, next) {
         try {
-            const userID = req.query.userID
+            const { name, desc, price, category, sizes } = req.body;
+            const newProduct = new ProductModel(name, desc, parseFloat(price),  req.file.filename, category, sizes.split(','),)
+           
+            const createdRecord = await this.productRepository.add(newProduct);
+            console.log(createdRecord);
+            
+            return res.status(201).send(newProduct);
+            
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send("something went wrong ???")
+        }
+    }
+
+    async getOneProduct(req, res) {
+
+        try {
+            const id = req.params.id
+            const product = await this.productRepository.get(id)
+            if (!product) {
+                res.status(404).send('Product not found!')
+            } else {
+                res.status(200).send(product)
+            }
+            
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send("something went wrong ???")
+        }
+    }
+
+    async filterProducts(req, res) {
+
+        try {
+            const minPrice = req.query.minPrice;
+            const maxPrice = req.query.maxPrice;
+            const category = req.query.category;
+            
+            const result = await this.productRepository.filter(minPrice, maxPrice, category);
+            console.log(result);
+    
+            res.status(200).send(result)
+            
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send("something went wrong ???")
+        }
+    }
+    async rateProduct(req, res, next) {
+        try {
+            console.log(req.userID,"inside product controller");
+            
+            const userID = req.userID
             const productID = req.query.productID
             const rating = req.query.rating
 
 
-            ProductModel.rateProduct(userID, productID, rating)
-
+            await this.productRepository.rate(userID, productID, rating)
             return res.status(200).send('Rating added')
+
         } catch (error) {            
             next(error)
         }
