@@ -1,28 +1,52 @@
 import CartItemModel from "./cartItems.model.js"
+import CartItemsRepository from "./cartItems.repository.js"
 
 
 export default class CartItemsController{
-    add(req, res){
-        const {productID, quantity} = req.query
-        const userID = req.userID
-        CartItemModel.add(productID,userID,quantity)
-        res.status(201).send('cart is updated')
-    }
 
-    get(req, res){
-        const userID = req.userID
-        const result = CartItemModel.get(userID)
-        res.status(200).send(result)
+    constructor(){
+        this.cartItemRepository = new CartItemsRepository()
     }
+    async add(req, res){
 
-    delete(req,res){
-        const userID = req.userID
-        const cartItemID = req.params.id
-        const error = CartItemModel.delete(cartItemID, userID)
-        if(error){
-            return res.status(404).send(error)
+        try {
+            const {productID, quantity} = req.body
+            const userID = req.userID
+            await this.cartItemRepository.add(productID,userID,quantity)
+            res.status(201).send('cart is updated')
+            
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send("something went wrong ???")
         }
-        return res.status(201).send('deleted items')
+    }
+    
+    async get(req, res){
+        
+        try {
+            const userID = req.userID
+            const result = await this.cartItemRepository.get(userID)
+            res.status(200).send(result)
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send("something went wrong ???")
+        }
+    }
+
+    async delete(req,res){
+        try {
+            const userID = req.userID
+            const cartItemID = req.params.id
+            const isDeleted = await this.cartItemRepository.delete(cartItemID, userID)
+            if(!isDeleted){
+                return res.status(404).send("Item not found")
+            }
+            return res.status(201).send('deleted items')
+            
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send("something went wrong ???")
+        }
     }
 
 }
