@@ -74,8 +74,8 @@ export default class ProductController {
             console.log(req.userID,"inside product controller");
             
             const userID = req.userID
-            const productID = req.query.productID
-            const rating = req.query.rating
+            const productID = req.body.productID
+            const rating = req.body.rating
 
 
             await this.productRepository.rate(userID, productID, rating)

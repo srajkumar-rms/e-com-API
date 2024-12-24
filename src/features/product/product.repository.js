@@ -80,6 +80,44 @@ export default class ProductRepository{
         }
     }
 
+    // async rate(userID, productID, rating){
+
+    //     try {
+    //         //1. Get database
+    //         const db = getDB()
+    //         //2. To get the collection
+    //         const collection = db.collection(this.collection)
+    //         //1. Find the product
+    //         const product = await collection.findOne({_id: new ObjectId(productID)})
+    //         //2. Find the rating
+    //         const userRating = product?.ratings?.find(r=>r.userID==userID)
+    //         console.log("user rating",userRating);
+            
+    //         if (userRating) {
+    //             //3. update the rating
+    //             await collection.updateOne({
+    //                 _id: new ObjectId(productID), "ratings.userID": new ObjectId(userID)
+    //             },{
+    //                 $set: {
+    //                     "ratings.$.rating": rating
+    //                 }
+    //             })
+    //         } else {
+    //             await collection.updateOne({
+    //                 _id: new ObjectId(productID)
+    //             },{
+    //                 $push: {ratings: {userID: new ObjectId(userID), rating}}
+    //             })
+                
+    //         }
+
+    //     } catch (error) {
+    //         console.log(error);
+    //         throw new ApplicationError("Something went wrong in products db", 500)
+    //     }
+    // }
+
+    // Pull approach to solve race around conditions
     async rate(userID, productID, rating){
 
         try {
@@ -87,11 +125,20 @@ export default class ProductRepository{
             const db = getDB()
             //2. To get the collection
             const collection = db.collection(this.collection)
-            collection.updateOne({
+            // delete existing ratings
+            await collection.updateOne({
+                _id: new ObjectId(productID)
+            },{
+                $pull: {ratings: {userID: new ObjectId(userID)}}
+            })
+
+            //4. add new ratings
+            await collection.updateOne({
                 _id: new ObjectId(productID)
             },{
                 $push: {ratings: {userID: new ObjectId(userID), rating}}
             })
+            
 
         } catch (error) {
             console.log(error);
