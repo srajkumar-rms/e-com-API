@@ -13,6 +13,7 @@ import apiDocs from "./swagger.json" with {type: 'json'}
 import loggerMiddleware from './src/middlewares/logger.middleware.js';
 import { ApplicationError } from './src/error-handler/applicationError.js';
 import {connectToMongoDB} from './src/config/mongodb.js';
+import orderRouter from './src/features/order/order.routes.js';
 
 // 2. Create Server
 const server = express();
@@ -45,6 +46,7 @@ server.use(express.json());
 
 server.use("/api-docs", swagger.serve, swagger.setup(apiDocs))
 server.use(loggerMiddleware)
+server.use("/api/orders", jwtMiddleware, orderRouter)
 
 server.use("/api/products", jwtMiddleware, productRouter);
 server.use("/api/users", userRouter)

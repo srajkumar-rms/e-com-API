@@ -11,14 +11,19 @@ export const connectToMongoDB = () =>{
     .then(clientInstance=> {
         client = clientInstance
         console.log('MongoDB is connected');
-        createCounter(client.db())
-        createIndexes(client.db())
+        // createCounter(client.db())
+        // createIndexes(client.db())
+        // createStock(client.db())
         
     })
     .catch(err=>{
         console.log(err);
         
     })
+}
+
+export const getClient = () =>{
+    return client
 }
 
 export const getDB = ()=>{
@@ -37,3 +42,9 @@ const createIndexes = async(db)=>{
     await db.collection("products").createIndex({name:1, category:-1})
     await db.collection("products").createIndex({desc:"text"})
 }
+
+
+// This was used to add "stock" field once time to modify the product schema
+// const createStock = async(db)=>{
+//     await db.collection("products").updateMany({}, {$set:{stock:20}})
+// }
