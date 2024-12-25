@@ -145,4 +145,17 @@ export default class ProductRepository{
             throw new ApplicationError("Something went wrong in products db", 500)
         }
     }
+
+    async averageProductPricePerCategory(){
+        try {
+            const db = getDB()
+            return await db.collection(this.collection).aggregate([{
+                        //1. get average price per catgory
+                        $group: {_id:"$category", averagePrice:{$avg: "$price"}}
+                    }]).toArray()
+        } catch (error) {
+            console.log(error);
+            throw new ApplicationError("Something went wrong in products db", 500)
+        }
+    }
 }

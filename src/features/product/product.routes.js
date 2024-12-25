@@ -17,6 +17,10 @@ productRouter.get('/filter',(req, res)=>{
 productRouter.get('/',(req, res)=>{
     productController.getAllProducts(req,res)
 });
+
+productRouter.get("/averageprice", (req, res, next)=>{
+    productController.averagePrice(req,res,next)
+})
 productRouter.get('/:id',(req, res)=>{
     productController.getOneProduct(req,res)
 });
