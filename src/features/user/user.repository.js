@@ -8,6 +8,23 @@ const UserModel = mongoose.model('User', userSchema)
 
 export default class UserRepository{
 
+
+    async resetPassword(userID, hashedPassword){
+        try {
+            let user = await UserModel.findById(userID)
+            if(user){
+                user.password = hashedPassword
+                user.save()
+            }else{
+                throw new Error("No user found")
+            }
+            
+        } catch (error) {
+            console.log(error);
+            throw new ApplicationError("Something went wrong in database", 500)
+        }
+    }
+
     async signUp(user){
         try {
             
