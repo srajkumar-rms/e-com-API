@@ -9,10 +9,9 @@ export default class UserController {
         this.userRepository = new UserRepository()
 
     }
-    async signUp(req, res, next) {
+    async signUp(req,res,next) {
 
         try {
-            console.log(req.body);
             const { name, email, password, type } = req.body
             const hashedPassword = await bcrypt.hash(password, 12)
             const user = new UserModel(name, email, hashedPassword, type)
@@ -33,22 +32,18 @@ export default class UserController {
                 return res.status(400).send('Incorrect credentials')
             } else {
                 //compare password 
-                const result = await bcrypt.compare(req.body.password, user.password)
+                const result = bcrypt.compare(req.body.password, user.password)
                 if(result) {
-    
                     //1. Create token 
                     const token = jwt.sign({ userID: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: "1h" })
-    
                     //2. Send token.
                     return res.status(200).send(token)
                 } else {
                     return res.status(400).send('Incorrect credentials')
                 }
             }
-
         } catch (error) {
             console.log(error);
-
             return res.status(500).send("something went wrong ???")
         }
     }
