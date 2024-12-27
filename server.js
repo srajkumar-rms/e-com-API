@@ -15,6 +15,8 @@ import { ApplicationError } from './src/error-handler/applicationError.js';
 import {connectToMongoDB} from './src/config/mongodb.js';
 import orderRouter from './src/features/order/order.routes.js';
 import { connectUsingMongoose } from './src/config/mongooseConfig.js';
+import mongoose from 'mongoose';
+import likeRouter from './src/features/like/like.routes.js';
 
 // 2. Create Server
 const server = express();
@@ -51,7 +53,9 @@ server.use("/api/orders", jwtMiddleware, orderRouter)
 
 server.use("/api/products", jwtMiddleware, productRouter);
 server.use("/api/users", userRouter)
+server.use("/api/likes", jwtMiddleware, likeRouter)
 server.use("/api/cart", jwtMiddleware, cartItemRouter)
+
 
 // 3. Default request handler
 server.get('/', (req, res) => {
@@ -61,6 +65,9 @@ server.get('/', (req, res) => {
 // Error handler middleware
 server.use((err, req, res, next) => {
     //Application Error handler
+    if(err instanceof mongoose.Error.ValidationError){
+        res.status(400).send(err.message)
+    }
     if (err instanceof ApplicationError) {
         res.status(err.code).send(err.message)
     } else {

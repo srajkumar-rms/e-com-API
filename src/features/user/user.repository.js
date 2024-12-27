@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 import { userSchema } from "./user.schema.js";
 import { ApplicationError } from "../../error-handler/applicationError.js";
 
@@ -33,8 +33,13 @@ export default class UserRepository{
             await newUser.save()
             return
         } catch (error) {
-            console.log(error);
-            throw new ApplicationError("Something went wrong in database", 500)
+            if(error instanceof mongoose.Error.ValidationError){
+                throw error
+            }else{
+                console.log(error);
+                throw new ApplicationError("Something went wrong in database", 500)
+
+            }
         }
 
     }

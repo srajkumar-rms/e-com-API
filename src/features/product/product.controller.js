@@ -1,5 +1,7 @@
 import ProductModel from "./product.model.js";
+import mongoose from "mongoose";
 import ProductRepository from "./product.repository.js";
+
 
 export default class ProductController {
     constructor(){
@@ -21,8 +23,8 @@ export default class ProductController {
     async addProduct(req, res) {
 
         try {
-            const { name, desc, price, category, sizes } = req.body;
-            const newProduct = new ProductModel(name, desc, parseFloat(price),  req.file.filename, category, sizes.split(','),)
+            const { name, price, description, categories,sizes } = req.body;
+            const newProduct = new ProductModel(name, description, parseFloat(price), categories, req?.file?.filename , sizes?.split(','),)
            
             const createdRecord = await this.productRepository.add(newProduct);
             console.log(createdRecord);
@@ -70,9 +72,7 @@ export default class ProductController {
         }
     }
     async rateProduct(req, res, next) {
-        try {
-            console.log(req.userID,"inside product controller");
-            
+        try {            
             const userID = req.userID
             const productID = req.body.productID
             const rating = req.body.rating
