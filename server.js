@@ -9,7 +9,7 @@ import { basicAuthorizer } from './src/middlewares/basicAuth.middleware.js';
 import jwtMiddleware from './src/middlewares/jwt.middleware.js';
 import cartItemRouter from './src/features/cart/cartItems.routes.js';
 import swagger from 'swagger-ui-express'
-import apiDocs from "./swagger.json" with {type: 'json'}
+import apiDocs from "./swagger.json" assert {type: 'json'}
 import loggerMiddleware from './src/middlewares/logger.middleware.js';
 import { ApplicationError } from './src/error-handler/applicationError.js';
 import {connectToMongoDB} from './src/config/mongodb.js';
